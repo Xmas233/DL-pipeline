@@ -1,6 +1,7 @@
 import os
 import torch
-import data_setup, engine, model_builder, utils
+import data_setup, engine, utils
+from models.TinyVGG import TinyVGG
 from torchvision import transforms
 import swanlab
 
@@ -46,7 +47,7 @@ if __name__ == "__main__":
     )
 
     # Create model
-    model = model_builder.TinyVGG(
+    model = TinyVGG.TinyVGG(
         input_shape=3,
         hidden_units=HIDDEN_UNITS,
         output_shape=len(class_names)
@@ -65,4 +66,4 @@ if __name__ == "__main__":
         device=device,
         epochs=NUM_EPOCHS)
 
-    utils.save_model(model=model, target_dir="models", model_name="tiny_vgg.pth")
+    utils.save_model(model=model, target_dir="ckpt/final", model_name="tiny_vgg.pth")

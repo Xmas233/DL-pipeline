@@ -5,6 +5,8 @@ import torch
 import swanlab
 from tqdm.auto import tqdm
 from typing import Dict, List, Tuple
+import utils
+
 
 
 def train_steps(model: torch.nn.Module,
@@ -117,7 +119,8 @@ def train(model: torch.nn.Module,
           optimizer: torch.optim.Optimizer,
           loss_fn: torch.nn.Module,
           epochs: int,
-          device: torch.device) -> Dict[str, List]:
+          device: torch.device,
+          save_epoch: int = 10) -> Dict[str, List]:
 
   # Create empty results dictionary
     results = {"train_loss": [],
@@ -157,6 +160,12 @@ def train(model: torch.nn.Module,
         results["train_acc"].append(train_acc)
         results["test_loss"].append(test_loss)
         results["test_acc"].append(test_acc)
+
+        if epoch != 0 and epoch % save_epoch == 0:
+            utils.save_model(model=model, target_dir="ckpt", model_name=f"tiny_vgg_{epoch}.pth")
+        
+        if device.type == 'cuda':
+            torch.cuda.empty_cache()
 
 
 
